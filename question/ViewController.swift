@@ -5,46 +5,35 @@
 //  Created by MacbookPro on 2022/12/26.
 //
 
+//畫面加UIKit
 import UIKit
-import AVFoundation
 
 class ViewController: UIViewController {
     
-    
+    //拉第幾題outlet為questionNumberlabel，，型別為UILabel
     @IBOutlet weak var questionNumberlabel: UILabel!
-    
+    //拉問題outlet為questionLabel，，型別為UILabel
     @IBOutlet weak var questionLabel: UILabel!
+    //拉答案outlet為answerLabel，，型別為UILabel
     @IBOutlet weak var answerLabel: UILabel!
+    //questions需寫在function外面
+    //產生空的array&加東⻄加到array裡，宣告questions成Controller的屬性，讓大家都讀得到
     var questions = [Question]()
+    //設變數數列為0
     var index = 0
-    let questionArray = [
-        "あ", "い", "う", "え", "お",
-        "か", "き", "く", "け", "こ",
-        "さ", "し", "す", "せ", "そ",
-        "た", "ち", "つ", "て", "と",
-        "な", "に", "ぬ", "ね", "の",
-        "は", "ひ", "ふ", "へ", "ほ",
-        "ま", "み", "む", "め", "も",
-        "や", "ゆ", "よ", "ら", "り",
-        "る", "れ", "ろ", "わ", "を",
-    ]
-    
-    func prounce()
-    {
-        
-        let utterance = AVSpeechUtterance(string: questionArray[index])
-          utterance.voice = AVSpeechSynthesisVoice(language: "jp-JP")
-          utterance.rate = 0.4
-      let synthesizer = AVSpeechSynthesizer()
-        synthesizer.speak(utterance)
-    }
+
+
     //
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
+        //產生空的array，加東⻄加到array裡。
+        //由於已經用struct設定類別Question，因此可以讓之後產生東西時，直接使用類別裡的屬性
         let questions1 = Question(description: "あ" , answer: "ア")
+        //在程式裡命令東⻄做事:  東⻄的名字 + . + function 名 + (參數)
+        //顯示questions1的內容。屬性append可為array加東西
         questions.append(questions1)
         
         let questions2 = Question(description: "い" , answer: "イ")
@@ -195,47 +184,52 @@ class ViewController: UIViewController {
         let questions45 = Question(description: "を" , answer: "ヲ")
         questions.append(questions45)
         
-        //
-        
+        //在程式裡命令東⻄做事:  東⻄的名字 + . + function 名 + (參數)
+        //隨機順序出題shuffle
         questions.shuffle()
-        
+        //呼叫指令updateUI讓題目更新
         updateUI()
         
-        
-        
-    }
+        }
     
-    //
-        
-        
+        //設func為updateUI，讓題目可以更新
         func updateUI() {
+            //讓questionLabel顯示出內容，用array寫法按照數列顯示題目
             questionLabel.text = questions[index].description
+            //讓questionNumberlabel顯示出內容，顯示為第\(index + 1)題
+            //讓數字變字串的方法:\(x)
             questionNumberlabel.text = "第\(index + 1)題"
+            //讓answerLabel顯示出內容，為""空字串
             answerLabel.text = ""
         
         }
     
     //
     
-    
+    //拉答案的Action為showAnswer，秀答案
     @IBAction func showAnswer(_ sender: Any) {
+        ////讓answerLabel顯示出內容，用array寫法按照數列顯示答案
         answerLabel.text = questions[index].answer
-        prounce()
-        
-        
     }
     
+    //拉下一題的Action為nextQuestion，顯示下一題
     @IBAction func nextQuestion(_ sender: Any) {
-
+        //讓數列為index+1除以全部問題數(questions.count)的餘數
+        //%:除的餘數
+        //questions.count:全部問題的數量
         index = (index + 1 ) % questions.count
+        //呼叫func 更新題目
         updateUI()
-        prounce()
+    
     
     }
-    
+    //拉"重來一次按鈕"的Action，讓app再來一次/重新
     @IBAction func replay(_ sender: Any) {
+        //隨機順序出題shuffle
         questions.shuffle()
+        //讓數列為0開始
         index = 0
+        //呼叫func 更新題目
         updateUI()
         
     }
